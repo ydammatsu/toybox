@@ -11,9 +11,11 @@ services:
       - db
   db:
     image: mysql:8.0
+    ports: 
+      - "4407:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: app_db
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: toybox_development
     volumes:
       - db_data:/var/lib/mysql
 volumes:
