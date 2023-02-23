@@ -2,7 +2,7 @@ version: '3'
 services:
   app:
     build: .
-    command: go run main.go
+    command: go run cmd/web/main.go
     ports:
       - "8080:8080"
     volumes:
