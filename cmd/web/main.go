@@ -1,28 +1,31 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/mysql"
+	"github.com/ydammatsu/toybox/database"
+	"github.com/ydammatsu/toybox/model"
 	"gorm.io/gorm"
 )
 
+func dbInit() *gorm.DB {
+	db := database.Connect()
+	db.AutoMigrate(&model.User{})
+	return db
+}
+
 func main() {
-	dsn := "root:password@tcp(db:3306)/toybox_development?charset=utf8mb4&parseTime=True&loc=Local"
-	_, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("Connected to database")
+	db := dbInit()
 
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
+		u := &model.User{}
+		db.First(u)
 		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello, World!",
+			"message": "Hello, World!" + u.Name,
 		})
 	})
 
